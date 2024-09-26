@@ -26,8 +26,8 @@
 //   );
 // }
 
-import { useSelector } from "react-redux";
-import { selectContacts } from "../../redux/contactsSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { deleteContact, selectContacts } from "../../redux/contactsSlice";
 import { selectNameFilter } from "../../redux/filtersSlice";
 // import { selectContacts } from "../redux/contactsSlice";
 // import { selectNameFilter } from "../redux/filtersSlice";
@@ -37,10 +37,14 @@ import css from "./ContactList.module.css";
 export default function ContactList() {
   const contacts = useSelector(selectContacts);
   const searchValue = useSelector(selectNameFilter);
+  const dispatch = useDispatch();
 
   const visibleContacts = contacts.filter((contact) =>
     contact.name.toLowerCase().includes(searchValue.toLowerCase())
   );
+  const handelDelete = (id) => {
+    dispatch(deleteContact(id))
+  };
 
   return (
     <ul>
@@ -50,6 +54,7 @@ export default function ContactList() {
             id={contact.id}
             name={contact.name}
             number={contact.number}
+            onDelete={handelDelete}
           />
         </li>
       ))}
